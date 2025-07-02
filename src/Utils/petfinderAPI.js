@@ -1,3 +1,5 @@
+// src/Utils/petfinderAPI.js
+
 const API_BASE = 'https://api.petfinder.com/v2';
 
 // will cache token so i dont have to fetch it every single time
@@ -33,11 +35,21 @@ export async function getAccessToken() {
 }
 
 
-// This function gets a list of all pets (home page)
-export async function getPets() {
+// this function now gets a list of pets optionally filtered by a query
+export async function getPets(query) {
   const accessToken = await getAccessToken();
 
-  const response = await fetch(`${API_BASE}/animals`, {
+  // Start with the base URL for fetching animals
+  let url = `${API_BASE}/animals`;
+
+  // if a query object is provided (example: { name: 'Fido' }) builds a query string
+  if (query) {
+    const queryParams = new URLSearchParams(query);
+    url += `?${queryParams.toString()}`;
+  }
+
+  // Use the final URL (which may or may not have search parameters)
+  const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
