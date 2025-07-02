@@ -3,21 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPetById } from '../../Utils/petfinderAPI';
-import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
+// imported the Carousel component from react-bootstrap
+import { Container, Row, Col, Card, Badge, Button, Carousel } from 'react-bootstrap';
 
 function PetDetails() {
-  // 'pet' will hold the single pet's data object once it's fetched.
+  // 'pet' will hold the single pets data object once its fetched
   const [pet, setPet] = useState(null);
-  // 'loading' and 'error' are used to manage the UI state during the API call.
+  // 'loading' and 'error' are used to manage the UI state during the API call
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // The useParams hook from React Router reads the URL and gives us the 'id' parameter.
-  // This comes from the route we defined in App.js: /pet/:id
+  // useParams hook from React Router reads the URL and gives us the 'id' parameter
+  // from the route defined in App js /pet/:id
   const { id } = useParams();
 
-  // The useEffect hook runs once when the component first loads to fetch the pet data.
-  // It will also re-run if the 'id' in the URL ever changes.
+  // useEffect hook runs once when the component first loads to fetch the pet data
+  // will also rerun if the 'id' in the URL ever changes
   useEffect(() => {
     const fetchPet = async () => {
       try {
@@ -26,7 +27,7 @@ function PetDetails() {
         setPet(petData);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch pet details.');
+        setError('Failed to fetch pet details');
         console.error(err);
       } finally {
         setLoading(false);
@@ -36,8 +37,7 @@ function PetDetails() {
     fetchPet();
   }, [id]);
 
-  // The following 'if' statements handle the display of the component
-  // while data is loading or if an error occurs.
+  // if statements handle the display of the component while data is loading or if an error occurs
   if (loading) {
     return <Container><p>Loading pet details...</p></Container>;
   }
@@ -50,21 +50,38 @@ function PetDetails() {
     return <Container><p>No pet data found.</p></Container>;
   }
   
-  // The 'dangerouslySetInnerHTML' prop is React's way of rendering raw HTML.
-  // It's needed here because the pet description from the API includes HTML tags.
-  // We only use this when we trust the source of the HTML content.
+  // This variable checks if the pet has photos available to display
+  const hasPhotos = pet.photos && pet.photos.length > 0;
 
+  // In the return block we check if the pet has photos
+  // If so we render the Carousel component
+  // If there are no photos we display a placeholder image instead
   return (
     <Container className="mt-4">
       <Row>
         <Col md={6}>
-          <Card>
-            <Card.Img 
-              variant="top" 
-              src={pet.primary_photo_cropped?.full || 'https://via.placeholder.com/600x600?text=No+Image'}
-              alt={pet.name}
-            />
-          </Card>
+          {hasPhotos ? (
+            <Carousel>
+              {pet.photos.map((photo) => (
+                <Carousel.Item key={photo.full}>
+                  <img
+                    className="d-block w-100"
+                    src={photo.full}
+                    alt={pet.name}
+                    style={{ height: '500px', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          ) : (
+            <Card>
+              <Card.Img 
+                variant="top" 
+                src={'https://via.placeholder.com/600x600?text=No+Image'}
+                alt={pet.name}
+              />
+            </Card>
+          )}
         </Col>
         <Col md={6}>
           <h1>{pet.name}</h1>

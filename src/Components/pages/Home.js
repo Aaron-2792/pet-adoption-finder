@@ -1,48 +1,32 @@
 // src/Components/pages/Home.js
 
-import React, { useState, useEffect } from 'react';
-// The only change is on the next line.
-// We changed './PetCard' to '../PetCard' to go up one directory.
+import React from 'react';
 import PetCard from '../PetCard';
-import { getPets } from '../../Utils/petfinderAPI';
 
-function Home() {
-  const [pets, setPets] = useState([]);
-  const [loading, setLoading] = useState(true);
+// Home now receives the pets and loading state as props from App js
+function Home({ pets, loading }) {
 
-  useEffect(() => {
-    getPets()
-      .then(data => {
-        // A small check to make sure data exists before setting it
-        if (data) {
-          setPets(data);
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch pets', err);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <p>Loading pets...</p>;
-
-  // A check in case no pets are returned
-  if (!pets || pets.length === 0) {
-    return <p>No pets found. Check the console for API errors.</p>
-  }
+  // lifted up to the App js component to create a global search
 
   return (
-    // We can use Bootstrap's <Container> component for nice padding and centering
     <div className="container">
-      <div className="row">
-        {pets.map(pet => (
-          // Use Bootstrap's column classes for a responsive grid
-          <div key={pet.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <PetCard pet={pet} />
-          </div>
-        ))}
-      </div>
+      <h1>Pet Adoption Finder</h1>
+
+      {loading ? (
+        <p>Loading pets...</p>
+      ) : (
+        <div className="row">
+          {pets.length > 0 ? (
+            pets.map(pet => (
+              <div key={pet.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <PetCard pet={pet} />
+              </div>
+            ))
+          ) : (
+            <p>No pets found for your search Try another name</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
