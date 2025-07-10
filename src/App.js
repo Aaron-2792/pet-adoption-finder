@@ -6,6 +6,8 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Home from './Components/pages/Home';
 import PetDetails from './Components/pages/PetDetails';
+// We need to import our new About page component
+import About from './Components/pages/About';
 import { getPets } from './Utils/petfinderAPI';
 
 function App() {
@@ -46,8 +48,6 @@ function App() {
     minHeight: '100vh'
   };
 
-  // the return we pass the handleSearch function down to the Header as a prop
-  // also pass the pets and loading state down to the Home page as props
   return (
     <div style={appStyles}>
       <Header onSearchSubmit={handleSearch} />
@@ -56,6 +56,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home pets={pets} loading={loading} />} />
           <Route path="/pet/:id" element={<PetDetails />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </main>
 

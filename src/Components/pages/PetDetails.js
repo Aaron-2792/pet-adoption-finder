@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPetById } from '../../Utils/petfinderAPI';
-// imported the Carousel component from react-bootstrap
 import { Container, Row, Col, Card, Badge, Button, Carousel } from 'react-bootstrap';
 
 function PetDetails() {
@@ -53,9 +52,6 @@ function PetDetails() {
   // This variable checks if the pet has photos available to display
   const hasPhotos = pet.photos && pet.photos.length > 0;
 
-  // In the return block we check if the pet has photos
-  // If so we render the Carousel component
-  // If there are no photos we display a placeholder image instead
   return (
     <Container className="mt-4">
       <Row>
@@ -74,13 +70,20 @@ function PetDetails() {
               ))}
             </Carousel>
           ) : (
-            <Card>
-              <Card.Img 
-                variant="top" 
-                src={'https://via.placeholder.com/600x600?text=No+Image'}
-                alt={pet.name}
-              />
-            </Card>
+            // more reliable placeholder
+            //  div with styling to create a gray box to reliably relay that no image is available
+            <div 
+              className="d-flex align-items-center justify-content-center"
+              style={{ 
+                height: '500px', 
+                backgroundColor: '#f0f0f0', 
+                borderRadius: '8px',
+                color: '#6c757d',
+                fontSize: '1.5rem'
+              }}
+            >
+              No Image Available
+            </div>
           )}
         </Col>
         <Col md={6}>
