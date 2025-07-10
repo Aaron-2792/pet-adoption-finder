@@ -1,23 +1,40 @@
+// src/Components/PetCard.js
+
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function PetCard({ pet }) {
-  // sets up a fallback URL to a service that generates placeholder images
-  const placeholderImage = 'https://via.placeholder.com/300x300.png?text=No+Image';
-  // ternary operator
-  const imageUrl = pet.photos && pet.photos.length > 0 ? pet.photos[0].medium : placeholderImage;
+  // This variable checks if the pet has photos available to display
+  const hasPhotos = pet.photos && pet.photos.length > 0;
+  // We get the URL for the first photo if it exists
+  const imageUrl = hasPhotos ? pet.photos[0].medium : null;
 
   return (
-    // turns the entire card into a link that navigates to the pets unique details page
+    // This turns the entire card into a link that navigates to the pets unique details page
     <Link to={`/pet/${pet.id}`} className="text-decoration-none">
       <Card className="h-100 shadow-sm">
-        <Card.Img 
-          variant="top" 
-          src={imageUrl} 
-          alt={pet.name} 
-          style={{ height: '200px', objectFit: 'cover' }} 
-        />
+        {hasPhotos ? (
+          // If photos exist render image using new custom class
+          <Card.Img 
+            variant="top" 
+            src={imageUrl} 
+            alt={pet.name} 
+            className="pet-card-img"
+          />
+        ) : (
+          // If no photos exist render placeholder using the same custom class
+          // Bootstrap utility classes for centering
+          <div 
+            className="pet-card-img d-flex align-items-center justify-content-center"
+            style={{ 
+              backgroundColor: '#f0f0f0', 
+              color: '#6c757d'
+            }}
+          >
+            No Image
+          </div>
+        )}
         <Card.Body>
           <Card.Title>{pet.name}</Card.Title>
           <Card.Text className="text-muted">

@@ -17,17 +17,24 @@ function Header({ onSearchSubmit }) {
     onSearchSubmit(searchTerm);
   };
 
-  // The form below calls our local handleSubmit function on submit
-  // The input value is controlled by our local searchTerm state
-  // and we update that state as the user types
+  // new function to clear the search results
+  // calls the same function from App js but passes an empty string
+  const handleResetSearch = () => {
+    onSearchSubmit('');
+    setSearchTerm(''); // clears the text in the search input box
+  };
+
   return (
     <Navbar bg="light" expand="lg" className="mb-4">
       <Container>
-        <Navbar.Brand as={Link} to="/">Pet Adoption</Navbar.Brand>
+        
+        <Navbar.Brand as={Link} to="/" onClick={handleResetSearch}>Pet Adoption</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            
+            <Nav.Link as={Link} to="/" onClick={handleResetSearch}>Home</Nav.Link>
+            <Nav.Link as={Link} to="/about">About Us</Nav.Link>
           </Nav>
           <Form className="d-flex" onSubmit={handleSubmit}>
             <FormControl
