@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPetById } from '../../Utils/petfinderAPI';
-import { Container, Row, Col, Card, Badge, Button, Carousel } from 'react-bootstrap';
+import { Container, Row, Col, Badge, Button, Carousel } from 'react-bootstrap';
 
 function PetDetails() {
   // 'pet' will hold the single pets data object once its fetched
