@@ -35,20 +35,19 @@ export async function getAccessToken() {
 }
 
 
-// this function now gets a list of pets optionally filtered by a query
-export async function getPets(query) {
+// This function now accepts a query for search and a page number for pagination
+export async function getPets(query, page) {
   const accessToken = await getAccessToken();
 
-  // Start with the base URL for fetching animals
-  let url = `${API_BASE}/animals`;
+  // Create a new URLSearchParams object from the search query
+  const queryParams = new URLSearchParams(query);
+  
+  // Added the requested page number to our parameters
+  queryParams.append('page', page);
 
-  // if a query object is provided (example: { name: 'Fido' }) builds a query string
-  if (query) {
-    const queryParams = new URLSearchParams(query);
-    url += `?${queryParams.toString()}`;
-  }
+  // Build final URL with all the parameters
+  const url = `${API_BASE}/animals?${queryParams.toString()}`;
 
-  // Use the final URL (which may or may not have search parameters)
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -60,7 +59,9 @@ export async function getPets(query) {
   }
 
   const data = await response.json();
-  return data.animals; // returns an array of pets
+  
+  // Return the entire data object which includes both animals and pagination info
+  return data;
 }
 
 
