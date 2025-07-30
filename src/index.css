@@ -17,3 +17,17 @@ code {
   height: 200px;
   object-fit: cover;
 }
+
+.details-page-img {
+  height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.details-page-placeholder {
+  height: 500px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #6c757d;
+  font-size: 1.5rem;
+}

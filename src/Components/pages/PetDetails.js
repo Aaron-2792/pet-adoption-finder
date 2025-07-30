@@ -60,27 +60,19 @@ function PetDetails() {
             <Carousel>
               {pet.photos.map((photo) => (
                 <Carousel.Item key={photo.full}>
+                  {/* The inline style has been replaced with new custom class */}
                   <img
-                    className="d-block w-100"
+                    className="d-block w-100 details-page-img"
                     src={photo.full}
                     alt={pet.name}
-                    style={{ height: '500px', objectFit: 'cover', borderRadius: '8px' }}
                   />
                 </Carousel.Item>
               ))}
             </Carousel>
           ) : (
-            // more reliable placeholder
-            //  div with styling to create a gray box to reliably relay that no image is available
+            // The inline style has been replaced with our new placeholder class
             <div 
-              className="d-flex align-items-center justify-content-center"
-              style={{ 
-                height: '500px', 
-                backgroundColor: '#f0f0f0', 
-                borderRadius: '8px',
-                color: '#6c757d',
-                fontSize: '1.5rem'
-              }}
+              className="d-flex align-items-center justify-content-center details-page-placeholder"
             >
               No Image Available
             </div>

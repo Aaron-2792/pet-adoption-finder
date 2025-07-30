@@ -13,10 +13,11 @@ function App() {
   // state for our pets list and loading status
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  // state for our search query
-  const [searchQuery, setSearchQuery] = useState('');
   
-  // new state for pagination
+  // searchQuery is now an object to hold multiple filter criteria
+  const [searchQuery, setSearchQuery] = useState({});
+  
+  // state for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -26,12 +27,24 @@ function App() {
     const fetchPets = async () => {
       setLoading(true);
       try {
-        const query = searchQuery ? { name: searchQuery } : {};
-        // We now pass the currentPage to our API function
-        const data = await getPets(query, currentPage);
-        // We correctly set the pets list from data.animals
+        // created a clean query object to avoid sending empty parameters to the API
+        const cleanQuery = {};
+        if (searchQuery.name) {
+          cleanQuery.name = searchQuery.name;
+        }
+        if (searchQuery.type) {
+          cleanQuery.type = searchQuery.type;
+        }
+        // This is the new line to handle the location search
+        if (searchQuery.location) {
+          cleanQuery.location = searchQuery.location;
+        }
+
+        // pass the clean query and the currentPage to our API function
+        const data = await getPets(cleanQuery, currentPage);
+        // correctly set the pets list from data.animals
         setPets(data.animals || []);
-        // We also set the total number of pages from data.pagination
+        // also set the total number of pages from data.pagination
         setTotalPages(data.pagination?.total_pages || 0);
       } catch (err) {
         console.error('Failed to fetch pets', err);
@@ -40,16 +53,16 @@ function App() {
     };
 
     fetchPets();
-  }, [searchQuery, currentPage]); // useEffect now also depends on currentPage
+  }, [searchQuery, currentPage]);
 
-  // function passed to the Header for handling search submissions
-  const handleSearch = (term) => {
-    setSearchQuery(term);
+  // This function now receives a search object from the Header
+  const handleSearch = (searchParams) => {
+    setSearchQuery(searchParams);
     // When a new search is made we must reset the page to 1
     setCurrentPage(1);
   };
 
-  // new function that will be passed down to our pagination component
+  // function that will be passed down to our pagination component
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
