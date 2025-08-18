@@ -19,22 +19,26 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Build And Deploy
+      
+      
+      - name: Build App
+        run: |
+          npm install
+          npm run build
+        env: # We explicitly provide the secrets to the build command
+          REACT_APP_PETFINDER_API_KEY: ${{ secrets.REACT_APP_PETFINDER_API_KEY }}
+          REACT_APP_PETFINDER_SECRET: ${{ secrets.REACT_APP_PETFINDER_SECRET }}
+
+      - name: Deploy to Azure
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_BAY_077FAF710 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
-        env: # This is the new block we added
-          REACT_APP_PETFINDER_API_KEY: ${{ secrets.REACT_APP_PETFINDER_API_KEY }}
-          REACT_APP_PETFINDER_SECRET: ${{ secrets.REACT_APP_PETFINDER_SECRET }}
+          app_location: "build" # We now point directly to the build folder
+          api_location: ""
+          output_location: "" # The output is already in the app_location
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
