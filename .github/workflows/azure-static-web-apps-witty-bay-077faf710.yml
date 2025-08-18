@@ -32,6 +32,9 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env: # This is the new block we added
+          REACT_APP_PETFINDER_API_KEY: ${{ secrets.REACT_APP_PETFINDER_API_KEY }}
+          REACT_APP_PETFINDER_SECRET: ${{ secrets.REACT_APP_PETFINDER_SECRET }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
