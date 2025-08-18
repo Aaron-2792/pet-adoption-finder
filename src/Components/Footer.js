@@ -1,11 +1,15 @@
+// src/Components/Footer.js
+
 import React from 'react';
 import { Container } from 'react-bootstrap';
 
 function Footer() {
   return (
-    <footer className="mt-auto py-3 bg-light">
+    //  new custom class
+    <footer className="mt-auto py-3 footer-custom">
       <Container>
-        <p className="text-center text-muted">
+        {/*  'text-white-50' to make the text readable on dark background */}
+        <p className="text-center text-white-50 mb-0">
           &copy; 2025 Pet Adoption Finder. All Rights Reserved.
         </p>
       </Container>
