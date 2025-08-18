@@ -85,3 +85,22 @@ export async function getPetById(id) {
   // API returns the single pet object inside an "animal" property
   return data.animal;
 }
+
+//  new function to get all available animal types
+export async function getAnimalTypes() {
+  const accessToken = await getAccessToken();
+
+  const response = await fetch(`${API_BASE}/types`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch animal types');
+  }
+
+  const data = await response.json();
+  // API returns the list of types inside a "types" property
+  return data.types;
+}

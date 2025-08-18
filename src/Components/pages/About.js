@@ -5,28 +5,51 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 
 function About() {
   return (
-    <Container className="mt-4">
-      <Row className="justify-content-center">
+    <Container className="my-5">
+      <Row className="justify-content-center text-center mb-4">
         <Col md={8}>
-          <Card>
+          <h1 className="display-4">About Pet Adoption Finder</h1>
+          <p className="lead text-muted">
+            Connecting loving homes with pets in need.
+          </p>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md={6} className="mb-4">
+          <Card className="h-100 shadow-sm">
             <Card.Body>
-              <Card.Title as="h1" className="text-center mb-4">About This Project</Card.Title>
+              <Card.Title as="h3" className="mb-3">Our Mission</Card.Title>
               <Card.Text>
-                This Pet Adoption Finder is a capstone project built using modern web technologies the goal is to create a seamless and intuitive experience for users looking to find their next furry friend
-              </Card.Text>
-              <hr />
-              <h5 className="mt-4">Technologies Used:</h5>
-              <ul>
-                <li><strong>React:</strong> A powerful JavaScript library for building user interfaces</li>
-                <li><strong>React Router:</strong> For handling client side navigation between pages</li>
-                <li><strong>React-Bootstrap:</strong> A library of pre-built components for a professional and responsive design</li>
-                <li><strong>Petfinder API:</strong> The official API used to source live data of adoptable pets</li>
-              </ul>
-              <Card.Text className="mt-4">
-                This project demonstrates key concepts in frontend development including component based architecture, API integration, and client side routing
+                In the U.S. alone, millions of wonderful companion animals enter shelters every year, waiting for a second chance. We believe that this can bridge the gap between these pets and their future families. Our mission is to provide a clean, modern, and easy-to-use platform that simplifies the adoption process, making it easier than ever to find your perfect companion.
               </Card.Text>
             </Card.Body>
           </Card>
+        </Col>
+        <Col md={6} className="mb-4">
+          <Card className="h-100 shadow-sm">
+            <Card.Body>
+              <Card.Title as="h3" className="mb-3">How It Works</Card.Title>
+              <Card.Text>
+                This application is powered by the official Petfinder API, providing you with live, up-to-date listings from thousands of shelters across the country. Simply use our advanced search and filtering tools to narrow down your options, click on a pet to view their details, and use the link provided to connect directly with the shelter for adoption.
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-center text-center mt-4">
+        <Col md={8}>
+          <h3>Core Technologies</h3>
+          <p className="text-muted">
+            This project was built as a capstone to demonstrate a full range of modern web development skills.
+          </p>
+          <ul className="list-inline">
+            <li className="list-inline-item"><span className="badge bg-primary p-2 m-1">React</span></li>
+            <li className="list-inline-item"><span className="badge bg-primary p-2 m-1">React Router</span></li>
+            <li className="list-inline-item"><span className="badge bg-primary p-2 m-1">React-Bootstrap</span></li>
+            <li className="list-inline-item"><span className="badge bg-primary p-2 m-1">Petfinder API</span></li>
+          </ul>
         </Col>
       </Row>
     </Container>

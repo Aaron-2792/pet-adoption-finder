@@ -3,21 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPetById } from '../../Utils/petfinderAPI';
-import { Container, Row, Col, Badge, Button, Carousel } from 'react-bootstrap';
+import { Container, Row, Col, Badge, Button, Carousel, Card, Spinner } from 'react-bootstrap';
 
-function PetDetails() {
-  // 'pet' will hold the single pets data object once its fetched
+// The component now needs to receive the favorites list and the toggle function
+function PetDetails({ favorites, onFavoriteClick }) {
+  // state for the pet data
   const [pet, setPet] = useState(null);
-  // 'loading' and 'error' are used to manage the UI state during the API call
+  // state for loading and error UI
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useParams hook from React Router reads the URL and gives us the 'id' parameter
-  // from the route defined in App js /pet/:id
+  // useParams hook reads the pet's ID from the URL
   const { id } = useParams();
 
-  // useEffect hook runs once when the component first loads to fetch the pet data
-  // will also rerun if the 'id' in the URL ever changes
+  // useEffect hook fetches the pet data when the component loads
   useEffect(() => {
     const fetchPet = async () => {
       try {
@@ -26,7 +25,7 @@ function PetDetails() {
         setPet(petData);
         setError(null);
       } catch (err) {
-        setError('Failed to fetch pet details');
+        setError('Failed to fetch pet details.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -36,78 +35,119 @@ function PetDetails() {
     fetchPet();
   }, [id]);
 
-  // if statements handle the display of the component while data is loading or if an error occurs
+  // A simple spinner component for a better loading experience
+  const LoadingSpinner = () => (
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    </div>
+  );
+
+  // Render logic for loading, error, or no data states
   if (loading) {
-    return <Container><p>Loading pet details...</p></Container>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <Container><p className="text-danger">{error}</p></Container>;
+    return <Container><p className="text-danger text-center mt-5">{error}</p></Container>;
   }
 
   if (!pet) {
-    return <Container><p>No pet data found.</p></Container>;
+    return <Container><p className="text-center mt-5">No pet data found.</p></Container>;
   }
   
-  // This variable checks if the pet has photos available to display
+  // This variable checks if the pet has photos to display
   const hasPhotos = pet.photos && pet.photos.length > 0;
+  // This variable checks if the current pet is in the favorites list
+  const isFavorite = favorites.some(fav => fav.id === pet.id);
 
   return (
     <Container className="mt-4">
-      <Row>
-        <Col md={6}>
-          {hasPhotos ? (
-            <Carousel>
-              {pet.photos.map((photo) => (
-                <Carousel.Item key={photo.full}>
-                  <img
-                    className="d-block w-100"
-                    src={photo.full}
-                    alt={pet.name}
-                    style={{ height: '500px', objectFit: 'cover', borderRadius: '8px' }}
-                  />
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          ) : (
-            // more reliable placeholder
-            //  div with styling to create a gray box to reliably relay that no image is available
-            <div 
-              className="d-flex align-items-center justify-content-center"
-              style={{ 
-                height: '500px', 
-                backgroundColor: '#f0f0f0', 
-                borderRadius: '8px',
-                color: '#6c757d',
-                fontSize: '1.5rem'
-              }}
-            >
-              No Image Available
-            </div>
-          )}
-        </Col>
-        <Col md={6}>
-          <h1>{pet.name}</h1>
-          <p className="text-muted">{pet.breeds.primary}</p>
-          <hr />
-          <h5>Details</h5>
-          <ul>
-            <li><strong>Age:</strong> {pet.age}</li>
-            <li><strong>Gender:</strong> {pet.gender}</li>
-            <li><strong>Size:</strong> {pet.size}</li>
-            <li><strong>Status:</strong> <Badge bg="success">{pet.status}</Badge></li>
-          </ul>
-          
-          {pet.description && (
-            <>
-              <h5>About Me</h5>
-              <div dangerouslySetInnerHTML={{ __html: pet.description }} />
-            </>
-          )}
+      <Row className="justify-content-center">
+        <Col xxl={10}>
+          <Row>
+            {/* Left Column for Images */}
+            <Col lg={7}>
+              {hasPhotos ? (
+                <Carousel>
+                  {pet.photos.map((photo) => (
+                    <Carousel.Item key={photo.full}>
+                      <img
+                        className="d-block w-100 details-page-img"
+                        src={photo.full}
+                        alt={pet.name}
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <div 
+                  className="d-flex align-items-center justify-content-center details-page-placeholder"
+                >
+                  No Image Available
+                </div>
+              )}
+            </Col>
 
-          <Button href={pet.url} target="_blank" rel="noopener noreferrer" className="mt-3">
-            Adopt Me on Petfinder
-          </Button>
+            {/* Right Column for Details */}
+            <Col lg={5}>
+              <Card>
+                <Card.Header as="div" className="d-flex justify-content-between align-items-center">
+                  <h2 className="mb-0">{pet.name}</h2>
+                  {/* new favorite button */}
+                  <Button 
+                    variant={isFavorite ? 'danger' : 'outline-danger'}
+                    onClick={() => onFavoriteClick(pet)}
+                    style={{ 
+                      borderRadius: '50%', 
+                      width: '40px', 
+                      height: '40px',
+                      // center the heart icon
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 0
+                    }}
+                  >
+                    ❤️
+                  </Button>
+                </Card.Header>
+                <Card.Body>
+                  <Card.Subtitle className="mb-3 text-muted text-center">
+                    {pet.breeds.primary}
+                  </Card.Subtitle>
+
+                  {/* Displaying tags like "Friendly", "Playful" as badges */}
+                  <div className="text-center mb-3">
+                    {pet.tags.map(tag => (
+                      <Badge pill bg="info" className="me-1" key={tag}>{tag}</Badge>
+                    ))}
+                  </div>
+
+                  {/* Using a grid for key attributes to make them easy to scan */}
+                  <Row className="text-center mb-3">
+                    <Col><strong>Age</strong><br/>{pet.age}</Col>
+                    <Col><strong>Size</strong><br/>{pet.size}</Col>
+                    <Col><strong>Gender</strong><br/>{pet.gender}</Col>
+                  </Row>
+                  
+                  {pet.description && (
+                    <>
+                      <hr />
+                      <h5>About Me</h5>
+                      <div dangerouslySetInnerHTML={{ __html: pet.description }} />
+                    </>
+                  )}
+                </Card.Body>
+                <Card.Footer>
+                  <Button href={pet.url} target="_blank" rel="noopener noreferrer" className="w-100" size="lg">
+                    Adopt Me on Petfinder
+                  </Button>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Container>
