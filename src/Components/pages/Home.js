@@ -23,9 +23,9 @@ function Home({ pets, loading, currentPage, totalPages, onPageChange, favorites,
 
   return (
     <div className="container">
-      {/* We use Bootstrap's flexbox utilities to align the icon and title */}
+      {/* use Bootstrap's flexbox utilities to align the icon and title */}
       <div className="d-flex align-items-center">
-        {/* This now uses an image from your public folder */}
+        {/* image from public folder */}
         <img 
           src={process.env.PUBLIC_URL + '/paw-icon.png'} 
           alt="Paw print icon" 
@@ -33,7 +33,7 @@ function Home({ pets, loading, currentPage, totalPages, onPageChange, favorites,
         />
         <h1>Pet Adoption Finder</h1>
       </div>
-      {/* This is the new decorative line */}
+      {/*  decorative line */}
       <hr style={{ 
         height: '3px', 
         backgroundColor: '#2c3e50', 
@@ -43,7 +43,7 @@ function Home({ pets, loading, currentPage, totalPages, onPageChange, favorites,
       }}/>
 
       {loading ? (
-        // If loading is true we now show our new spinner component
+        // If loading is true now show our new spinner component
         <LoadingSpinner />
       ) : (
         // wrap content in a React Fragment <> to return multiple elements
