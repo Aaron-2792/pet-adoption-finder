@@ -1,4 +1,4 @@
-https://witty-bay-077faf710.1.azurestaticapps.net (live site)
+https://witty-bay-077faf710.1.azurestaticapps.net (LIVE DEMO SITE)
 Pet Adoption Finder
 
 This is a comprehensive capstone project built to demonstrate a full range of modern web development skills by creating a real-world, data-intensive application. The goal of this project is to provide a clean, fast, and user-friendly web application that makes it easier for people to find and adopt a pet.
