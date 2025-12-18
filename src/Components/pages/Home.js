@@ -31,15 +31,25 @@ function Home({ pets, loading, currentPage, totalPages, onPageChange, favorites,
           alt="Paw print icon" 
           style={{ width: '40px', height: '40px', marginRight: '15px' }}
         />
-        <h1>Pet Adoption Finder</h1>
+        {/* Wrapped h1 in a div to add the subtitle underneath */}
+        <div>
+          <h1 className="mb-0">Pet Adoption Finder</h1>
+          <small className="text-muted">Demo Mode • API Deprecated Dec 2025</small>
+        </div>
       </div>
-      {/*  decorative line */}
+
+      {/* Added alert about the API change */}
+      <div className="alert alert-warning mt-3" role="alert">
+        <strong>Notice:</strong> The Petfinder API was decommissioned in Dec 2025. This portfolio project now uses static mock data to demonstrate functionality.
+      </div>
+
+      {/* decorative line */}
       <hr style={{ 
         height: '3px', 
         backgroundColor: '#2c3e50', 
         border: 'none', 
         opacity: 1, 
-        marginTop: '0.5rem' 
+        marginTop: '1rem' 
       }}/>
 
       {loading ? (
