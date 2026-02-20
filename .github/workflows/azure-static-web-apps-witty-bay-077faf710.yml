@@ -19,8 +19,9 @@ jobs:
         with:
           submodules: true
           lfs: false
-      
-      # 1. Manually build the app to ensure environment variables are injected
+
+      # Step 1: Manually build the React app
+      # This ensures environment variables are baked into the JS files correctly
       - name: Build App
         run: |
           npm install
@@ -29,19 +30,21 @@ jobs:
           REACT_APP_PETFINDER_API_KEY: ${{ secrets.REACT_APP_PETFINDER_API_KEY }}
           REACT_APP_PETFINDER_SECRET: ${{ secrets.REACT_APP_PETFINDER_SECRET }}
 
-      # 2. Deploy the "build" folder we just created to Azure
+      # Step 2: Upload the resulting 'build' folder to Azure
       - name: Deploy to Azure
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          # Ensure this secret name matches your GitHub Secrets exactly
+          # This token name must match your GitHub Secrets exactly
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_BAY_077FAF710 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "build" 
+          ###### Repository/Build Configurations ######
+          app_location: "build" # Point Azure directly to the output folder
           api_location: ""
-          output_location: "" 
+          output_location: "" # Leave empty since we are skipping the build
           skip_app_build: true # Tells Azure: "The app is already built, just upload it"
+          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
